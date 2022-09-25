@@ -1,5 +1,6 @@
 const btn = document.getElementById('btn');
 const list = document.getElementById('list');
+const form = document.getElementById('form');
 const state = {
   posts: [],
 };
@@ -9,7 +10,6 @@ const getPosts = async () => {
   const posts = await data.json();
   state.posts = posts;
 };
-// getPosts();
 
 async function postData(data) {
   const response = await fetch('https://backend-test-post.herokuapp.com/api/posts', {
@@ -17,15 +17,10 @@ async function postData(data) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
+    body: JSON.stringify(data),
   });
   return response.json();
 }
-const obj = {
-  author: 'Uladzislau',
-  title: 'post test',
-  content: 'lorem',
-};
 
 const createPosts = () => {
   const posts = state.posts
@@ -34,6 +29,7 @@ const createPosts = () => {
         <li>
             <p>${post.author}</p>
             <p>${post.title}</p>
+            <P>${post.content}</P>
         </li>
         `;
     })
@@ -43,6 +39,23 @@ const createPosts = () => {
   list.innerHTML = posts;
 };
 
-btn.addEventListener('click', () => {
-  postData(obj);
+const getDataFromForm = () => {
+  const formData = new FormData(form);
+  const data = [];
+  for (let item of formData) {
+    data.push(item);
+  }
+  const objData = Object.fromEntries(data);
+  return objData;
+};
+
+btn.addEventListener('click', async () => {
+  await getPosts();
+  createPosts();
+});
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const data = getDataFromForm();
+  postData(data);
 });
