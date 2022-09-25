@@ -6,7 +6,6 @@ const state = {
 const getPosts = async () => {
   const data = await fetch('https://backend-test-post.herokuapp.com/api/posts');
   const posts = await data.json();
-  console.log(posts);
   state.posts = posts;
 };
 getPosts();
