@@ -3,8 +3,9 @@ import Service from './Service.js';
 
 class Controller {
   async create(req, res) {
+    console.log(req.body);
     try {
-      const post = Service.create(req.body);
+      const post = await Service.create(req.body);
       res.json(post);
     } catch (error) {
       res.status(500).json(error);
